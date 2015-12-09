@@ -5,11 +5,11 @@
         "description": "Provides access to University of Auckland Course catalogue",
         "version": "1.0.0"
     },
-    "host": "api.uber.com",
+    "host": "sandbox.api.auckland.ac.nz",
     "schemes": [
         "https"
     ],
-    "basePath": "/v1",
+    "basePath": "/courses/v1",
     "produces": [
         "application/json"
     ],
