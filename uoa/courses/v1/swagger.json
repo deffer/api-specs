@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "Uber API",
-        "description": "Move your app forward with the Uber API",
+        "title": "Course catalogue API",
+        "description": "Provides access to University of Auckland Course catalogue",
         "version": "1.0.0"
     },
     "host": "api.uber.com",
