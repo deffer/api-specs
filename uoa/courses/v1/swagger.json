@@ -1,0 +1,189 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Uber API",
+        "description": "Move your app forward with the Uber API",
+        "version": "1.0.0"
+    },
+    "host": "api.uber.com",
+    "schemes": [
+        "https"
+    ],
+    "basePath": "/v1",
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/course": {
+            "get": {
+                "summary": "Course by subject and catalogue number",
+                "description": "Looks up course by subject area and catalogue number",
+                "parameters": [
+                    {
+                        "name": "subject_code",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Subject area code"
+                    },
+                    {
+                        "name": "course_number",
+                        "in": "query",
+                        "type": "string",
+                        "description": "Catalogue number"
+                    }
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array of products",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Course"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/course/{id}": {
+            "get": {
+                "summary": "Course information",
+                "description": "Course information",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Course unique id"
+                    }
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Course information",
+                        "schema": {
+                            "$ref": "#/definitions/Course"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/subject/{subject}/courses": {
+            "get": {
+                "summary": "Returns list of courses in this subject area",
+                "description": "Returns list of courses in this subject area",
+                "parameters": [
+                    {
+                        "name": "subject",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Subject area code"
+                    },
+                    {
+                        "name": "offset",
+                        "in": "query",
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "Offset the list of returned results by this amount. Default is zero."
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "Number of items to retrieve. Default is 5, maximum is 100."
+                    }
+                ],
+                "tags": [
+                    "Course"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Courses in given subject area",
+                        "schema": {
+                            "$ref": "#/definitions/Courses"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Course": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "Unique identifier of a course"
+                },
+                "title": {
+                    "type": "string",
+                    "description": "Course title."
+                },
+                "subjbect_name": {
+                    "type": "string",
+                    "description": "Subject area"
+                },
+                "number": {
+                    "type": "string",
+                    "description": "Course catalogue number"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "Course description."
+                },
+                "points": {
+                    "type": "integer",
+                    "format": "int32",
+                    "description": "Course description"
+                }
+            }
+        },
+        "Courses": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/Course"
+            }
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "fields": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
