@@ -281,7 +281,18 @@
                         "required": false,
                         "type": "string"
                     }
-                ]
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Elasticsearch result object including an array of found Courses",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/CourseListResult"
+                            }
+                        }
+                    }
+                }
             }
         },
         "/courses": {
@@ -326,8 +337,8 @@
         },
         "/courses/{id}": {
             "get": {
-                "summary": "Course information",
-                "description": "Course information",
+                "summary": "Returns course by its id",
+                "description": "Returns course by its id (example of id is '041150')",
                 "parameters": [
                     {
                         "name": "id",
@@ -342,9 +353,9 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Course information",
+                        "description": "Elasticsearch result containing Course information in _source field",
                         "schema": {
-                            "$ref": "#/definitions/Course"
+                            "$ref": "#/definitions/CourseResult"
                         }
                     },
                     "default": {
@@ -617,6 +628,68 @@
             "type": "array",
             "items": {
                 "$ref": "#/definitions/Course"
+            }
+        },
+        "CourseResult": {
+            "type": "object",
+            "properties": {
+                "_index": {
+                    "type": "string"
+                },
+                "_type": {
+                    "type": "string"
+                },
+                "_id": {
+                    "type": "string"
+                },
+                "_version": {
+                    "type": "long"
+                },
+                "found": {
+                    "type": "boolean"
+                },
+                "_source": {
+                    "$ref": "#/definitions/Course"
+                }
+            }
+        },
+        "CourseListResult": {
+            "type": "object",
+            "properties": {
+                "took": {
+                    "type": "string"
+                },
+                "_shards": {
+                    "type": "array"
+                },
+                "hits": {
+                    "type": "object",
+                    "properties": {
+                        "total": {
+                            "type": "long"
+                        },
+                        "max_score": {
+                            "type": "double"
+                        },
+                        "hits": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "_id": {
+                                        "type": "string"
+                                    },
+                                    "_score": {
+                                        "type": "double"
+                                    },
+                                    "_source": {
+                                        "$ref": "#/definitions/Course"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "Error": {
