@@ -5,7 +5,7 @@
         "description": "Provides access to University of Auckland Course catalogue",
         "version": "1.0.0"
     },
-    "host": "sandbox.api.auckland.ac.nz",
+    "host": "proxy.api.dev.auckland.ac.nz",
     "schemes": [
         "https"
     ],
@@ -14,7 +14,277 @@
         "application/json"
     ],
     "paths": {
-        "/course": {
+        "/courses/_search": {
+            "get": {
+                "summary": "Lucene powered search over the Course Catalogue",
+                "description": "The usage of this method is fully equivalent to usage of elasticsearch [Query String query](http://www.elastic.co/guide/en/elasticsearch/reference/master/search-search.html)",
+                "parameters": [
+                    {
+                        "paramType": "query",
+                        "name": "analyzer",
+                        "description": "The analyzer to use for the query string",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "analyze_wildcard",
+                        "description": "Specify whether wildcard and prefix queries should be analyzed (default: false)",
+                        "required": false,
+                        "type": "boolean"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "default_operator",
+                        "description": "The default operator for query string query (AND or OR)",
+                        "required": false,
+                        "type": "string",
+                        "defaultValue": "OR",
+                        "enum": [
+                            "AND",
+                            "OR"
+                        ]
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "df",
+                        "description": "The field to use as default where no field prefix is given in the query string",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "explain",
+                        "description": "Specify whether to return detailed information about score computation as part of a hit",
+                        "required": false,
+                        "type": "boolean"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "fields",
+                        "description": "A comma-separated list of fields to return as part of a hit",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "fielddata_fields",
+                        "description": "A comma-separated list of fields to return as the field data representation of a field for each hit",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "from",
+                        "description": "Starting offset (default: 0)",
+                        "required": false,
+                        "type": "number"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "ignore_unavailable",
+                        "description": "Whether specified concrete indices should be ignored when unavailable (missing or closed)",
+                        "required": false,
+                        "type": "boolean"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "allow_no_indices",
+                        "description": "Whether to ignore if a wildcard indices expression resolves into no concrete indices. (This includes `_all` string or when no indices have been specified)",
+                        "required": false,
+                        "type": "boolean"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "expand_wildcards",
+                        "description": "Whether to expand wildcard expression to concrete indices that are open, closed or both.",
+                        "required": false,
+                        "type": "string",
+                        "defaultValue": "open",
+                        "enum": [
+                            "open",
+                            "closed",
+                            "none",
+                            "all"
+                        ]
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "lenient",
+                        "description": "Specify whether format-based query failures (such as providing text to a numeric field) should be ignored",
+                        "required": false,
+                        "type": "boolean"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "lowercase_expanded_terms",
+                        "description": "Specify whether query terms should be lowercased",
+                        "required": false,
+                        "type": "boolean"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "preference",
+                        "description": "Specify the node or shard the operation should be performed on (default: random)",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "q",
+                        "description": "Query in the Lucene query string syntax",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "routing",
+                        "description": "A comma-separated list of specific routing values",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "scroll",
+                        "description": "Specify how long a consistent view of the index should be maintained for scrolled search",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "search_type",
+                        "description": "Search operation type",
+                        "required": false,
+                        "type": "string",
+                        "enum": [
+                            "query_then_fetch",
+                            "dfs_query_then_fetch",
+                            "count",
+                            "scan"
+                        ]
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "size",
+                        "description": "Number of hits to return (default: 10)",
+                        "required": false,
+                        "type": "number"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "sort",
+                        "description": "A comma-separated list of <field>:<direction> pairs",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "_source",
+                        "description": "True or false to return the _source field or not, or a list of fields to return",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "_source_exclude",
+                        "description": "A list of fields to exclude from the returned _source field",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "_source_include",
+                        "description": "A list of fields to extract and return from the _source field",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "terminate_after",
+                        "description": "The maximum number of documents to collect for each shard, upon reaching which the query execution will terminate early.",
+                        "required": false,
+                        "type": "number"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "stats",
+                        "description": "Specific 'tag' of the request for logging and statistical purposes",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "suggest_field",
+                        "description": "Specify which field to use for suggestions",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "suggest_mode",
+                        "description": "Specify suggest mode",
+                        "required": false,
+                        "type": "string",
+                        "defaultValue": "missing",
+                        "enum": [
+                            "missing",
+                            "popular",
+                            "always"
+                        ]
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "suggest_size",
+                        "description": "How many suggestions to return in response",
+                        "required": false,
+                        "type": "number"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "suggest_text",
+                        "description": "The source text for which the suggestions should be returned",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "timeout",
+                        "description": "Explicit operation timeout",
+                        "required": false,
+                        "type": "integer"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "track_scores",
+                        "description": "Whether to calculate and return scores even if they are not used for sorting",
+                        "required": false,
+                        "type": "boolean"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "version",
+                        "description": "Specify whether to return document version as part of a hit",
+                        "required": false,
+                        "type": "boolean"
+                    },
+                    {
+                        "paramType": "query",
+                        "name": "request_cache",
+                        "description": "Specify if request cache should be used for this request or not, defaults to index level setting",
+                        "required": false,
+                        "type": "boolean"
+                    },
+                    {
+                        "paramType": "body",
+                        "name": "body",
+                        "description": "The search definition using the Query DSL",
+                        "required": false,
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/courses": {
             "get": {
                 "summary": "Course by subject and catalogue number",
                 "description": "Looks up course by subject area and catalogue number",
@@ -54,7 +324,7 @@
                 }
             }
         },
-        "/course/{id}": {
+        "/courses/{id}": {
             "get": {
                 "summary": "Course information",
                 "description": "Course information",
@@ -64,7 +334,7 @@
                         "in": "path",
                         "required": true,
                         "type": "string",
-                        "description": "Course unique id"
+                        "description": "Course's unique id"
                     }
                 ],
                 "tags": [
@@ -137,30 +407,209 @@
         "Course": {
             "type": "object",
             "properties": {
+                "acad_career": {
+                    "type": "string"
+                },
+                "acad_group": {
+                    "type": "string"
+                },
+                "acad_org": {
+                    "type": "string"
+                },
+                "allow_mult_enroll": {
+                    "type": "string"
+                },
+                "campus": {
+                    "type": "string"
+                },
+                "catalog_nbr": {
+                    "type": "string"
+                },
+                "catalog_print": {
+                    "type": "string"
+                },
+                "component_primary": {
+                    "type": "string"
+                },
+                "consent": {
+                    "type": "string"
+                },
+                "course_approved": {
+                    "type": "string"
+                },
+                "course_title_long": {
+                    "type": "string"
+                },
+                "crse_contact_hrs": {
+                    "type": "double"
+                },
+                "crse_count": {
+                    "type": "long"
+                },
+                "crse_id": {
+                    "type": "string"
+                },
+                "crse_offer_nbr": {
+                    "type": "long"
+                },
+                "crse_repeat_limit": {
+                    "type": "long"
+                },
+                "crse_repeatable": {
+                    "type": "string"
+                },
+                "descr": {
+                    "type": "string"
+                },
+                "descrlong": {
+                    "type": "string"
+                },
+                "dyn_class_data": {
+                    "type": "string"
+                },
+                "eff_status": {
+                    "type": "string"
+                },
+                "effdt": {
+                    "type": "string"
+                },
+                "enrl_un_ld_clc_typ": {
+                    "type": "string"
+                },
+                "equiv_crse_id": {
+                    "type": "string"
+                },
+                "fees_exist": {
+                    "type": "string"
+                },
+                "grade_roster_print": {
+                    "type": "string"
+                },
+                "grading_basis": {
+                    "type": "string"
+                },
                 "id": {
-                    "type": "string",
-                    "description": "Unique identifier of a course"
+                    "type": "string"
                 },
-                "title": {
-                    "type": "string",
-                    "description": "Course title."
+                "instructor_edit": {
+                    "type": "string"
                 },
-                "subjbect_name": {
-                    "type": "string",
-                    "description": "Subject area"
+                "lst_mult_trm_crs": {
+                    "type": "string"
                 },
-                "number": {
-                    "type": "string",
-                    "description": "Course catalogue number"
+                "oee_dyn_date_rule": {
+                    "type": "string"
                 },
-                "description": {
-                    "type": "string",
-                    "description": "Course description."
+                "oee_ind": {
+                    "type": "string"
                 },
-                "points": {
-                    "type": "integer",
-                    "format": "int32",
-                    "description": "Course description"
+                "rqmnt_designtn": {
+                    "type": "string"
+                },
+                "rqrmnt_group": {
+                    "type": "string"
+                },
+                "scc_row_add_dttm": {
+                    "type": "string"
+                },
+                "scc_row_add_oprid": {
+                    "type": "string"
+                },
+                "scc_row_upd_dttm": {
+                    "type": "string"
+                },
+                "scc_row_upd_oprid": {
+                    "type": "string"
+                },
+                "schedule_course": {
+                    "type": "string"
+                },
+                "schedule_print": {
+                    "type": "string"
+                },
+                "split_owner": {
+                    "type": "string"
+                },
+                "ssr_ac_exam_only": {
+                    "type": "string"
+                },
+                "ssr_averge_crs_fee": {
+                    "type": "long"
+                },
+                "ssr_cccosts_fee": {
+                    "type": "long"
+                },
+                "ssr_component": {
+                    "type": "string"
+                },
+                "ssr_crse_clasif": {
+                    "type": "string"
+                },
+                "ssr_crse_hours": {
+                    "type": "long"
+                },
+                "ssr_crse_type": {
+                    "type": "string"
+                },
+                "ssr_crse_typoff_cd": {
+                    "type": "string"
+                },
+                "ssr_drop_consent": {
+                    "type": "string"
+                },
+                "ssr_efts_factor": {
+                    "type": "double"
+                },
+                "ssr_elearn_status": {
+                    "type": "string"
+                },
+                "ssr_emb_literacy": {
+                    "type": "string"
+                },
+                "ssr_foreign_fee": {
+                    "type": "long"
+                },
+                "ssr_funding_code": {
+                    "type": "string"
+                },
+                "ssr_main_program": {
+                    "type": "string"
+                },
+                "ssr_nqf_credit": {
+                    "type": "long"
+                },
+                "ssr_nqf_level": {
+                    "type": "string"
+                },
+                "ssr_nzsced_dtl": {
+                    "type": "string"
+                },
+                "ssr_pbrf_eligible": {
+                    "type": "string"
+                },
+                "ssr_stage": {
+                    "type": "string"
+                },
+                "ssr_vrf_nzl": {
+                    "type": "long"
+                },
+                "subject": {
+                    "type": "string"
+                },
+                "units_acad_prog": {
+                    "type": "double"
+                },
+                "units_finaid_prog": {
+                    "type": "double"
+                },
+                "units_maximum": {
+                    "type": "double"
+                },
+                "units_minimum": {
+                    "type": "double"
+                },
+                "units_repeat_limit": {
+                    "type": "double"
                 }
             }
         },
