@@ -1,0 +1,522 @@
+swagger: '2.0'
+info:
+  title: Course catalogue API
+  description: Provides access to University of Auckland Course catalogue
+  version: 1.0.0
+host: proxy.api.dev.auckland.ac.nz
+schemes:
+  - https
+basePath: /courses/v1
+produces:
+  - application/json
+paths:
+  /courses/_search:
+    get:
+      summary: Lucene powered search over the Course Catalogue
+      description: 'The usage of this method is fully equivalent to usage of elasticsearch [Query String query](http://www.elastic.co/guide/en/elasticsearch/reference/master/search-search.html)'
+      parameters:
+        - in: query
+          name: analyzer
+          description: The analyzer to use for the query string
+          required: false
+          type: string
+        - in: query
+          name: analyze_wildcard
+          description: 'Specify whether wildcard and prefix queries should be analyzed (default: false)'
+          required: false
+          type: boolean
+        - in: query
+          name: default_operator
+          description: The default operator for query string query (AND or OR)
+          required: false
+          type: string
+          
+          enum:
+            - AND
+            - OR
+        - in: query
+          name: df
+          description: The field to use as default where no field prefix is given in the query string
+          required: false
+          type: string
+        - in: query
+          name: explain
+          description: Specify whether to return detailed information about score computation as part of a hit
+          required: false
+          type: boolean
+        - in: query
+          name: fields
+          description: A comma-separated list of fields to return as part of a hit
+          required: false
+          type: string
+        - in: query
+          name: fielddata_fields
+          description: A comma-separated list of fields to return as the field data representation of a field for each hit
+          required: false
+          type: string
+        - in: query
+          name: from
+          description: 'Starting offset (default: 0)'
+          required: false
+          type: number
+        - in: query
+          name: ignore_unavailable
+          description: Whether specified concrete indices should be ignored when unavailable (missing or closed)
+          required: false
+          type: boolean
+        - in: query
+          name: allow_no_indices
+          description: Whether to ignore if a wildcard indices expression resolves into no concrete indices. (This includes `_all` string or when no indices have been specified)
+          required: false
+          type: boolean
+        - in: query
+          name: expand_wildcards
+          description: 'Whether to expand wildcard expression to concrete indices that are open, closed or both.'
+          required: false
+          type: string
+
+          enum:
+            - open
+            - closed
+            - none
+            - all
+        - in: query
+          name: lenient
+          description: Specify whether format-based query failures (such as providing text to a numeric field) should be ignored
+          required: false
+          type: boolean
+        - in: query
+          name: lowercase_expanded_terms
+          description: Specify whether query terms should be lowercased
+          required: false
+          type: boolean
+        - in: query
+          name: preference
+          description: 'Specify the node or shard the operation should be performed on (default: random)'
+          required: false
+          type: string
+        - in: query
+          name: q
+          description: Query in the Lucene query string syntax
+          required: false
+          type: string
+        - in: query
+          name: routing
+          description: A comma-separated list of specific routing values
+          required: false
+          type: string
+        - in: query
+          name: scroll
+          description: Specify how long a consistent view of the index should be maintained for scrolled search
+          required: false
+          type: integer
+        - in: query
+          name: search_type
+          description: Search operation type
+          required: false
+          type: string
+          enum:
+            - query_then_fetch
+            - dfs_query_then_fetch
+            - count
+            - scan
+        - in: query
+          name: size
+          description: 'Number of hits to return (default: 10)'
+          required: false
+          type: number
+        - in: query
+          name: sort
+          description: 'A comma-separated list of <field>:<direction> pairs'
+          required: false
+          type: string
+        - in: query
+          name: _source
+          description: 'True or false to return the _source field or not, or a list of fields to return'
+          required: false
+          type: string
+        - in: query
+          name: _source_exclude
+          description: A list of fields to exclude from the returned _source field
+          required: false
+          type: string
+        - in: query
+          name: _source_include
+          description: A list of fields to extract and return from the _source field
+          required: false
+          type: string
+        - in: query
+          name: terminate_after
+          description: 'The maximum number of documents to collect for each shard, upon reaching which the query execution will terminate early.'
+          required: false
+          type: number
+        - in: query
+          name: stats
+          description: "Specific 'tag' of the request for logging and statistical purposes"
+          required: false
+          type: string
+        - in: query
+          name: suggest_field
+          description: Specify which field to use for suggestions
+          required: false
+          type: string
+        - in: query
+          name: suggest_mode
+          description: Specify suggest mode
+          required: false
+          type: string
+
+          enum:
+            - missing
+            - popular
+            - always
+        - in: query
+          name: suggest_size
+          description: How many suggestions to return in response
+          required: false
+          type: number
+        - in: query
+          name: suggest_text
+          description: The source text for which the suggestions should be returned
+          required: false
+          type: string
+        - in: query
+          name: timeout
+          description: Explicit operation timeout
+          required: false
+          type: integer
+        - in: query
+          name: track_scores
+          description: Whether to calculate and return scores even if they are not used for sorting
+          required: false
+          type: boolean
+        - in: query
+          name: version
+          description: Specify whether to return document version as part of a hit
+          required: false
+          type: boolean
+        - in: query
+          name: request_cache
+          description: 'Specify if request cache should be used for this request or not, defaults to index level setting'
+          required: false
+          type: boolean
+        - in: body
+          name: body
+          description: The search definition using the Query DSL
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Elasticsearch result object including an array of found Courses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/CourseListResult'
+  /courses:
+    get:
+      summary: Course by subject and catalogue number
+      description: Looks up course by subject area and catalogue number
+      parameters:
+        - name: subject_code
+          in: query
+          type: string
+          description: Subject area code
+        - name: course_number
+          in: query
+          type: string
+          description: Catalogue number
+      tags:
+        - Course
+      responses:
+        '200':
+          description: An array of products
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Course'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  '/courses/{id}':
+    get:
+      summary: Returns course by its id
+      description: "Returns course by its id (example of id is '041150')"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: "Course's unique id, e.g. 041150"
+      tags:
+        - Course
+      responses:
+        '200':
+          description: Elasticsearch result containing Course information in _source field
+          schema:
+            $ref: '#/definitions/CourseResult'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+  '/subject/{subject}/courses':
+    get:
+      summary: Returns list of courses in this subject area
+      description: Returns list of courses in this subject area
+      parameters:
+        - name: subject
+          in: path
+          required: true
+          type: string
+          description: Subject area code
+        - name: offset
+          in: query
+          type: integer
+          format: int32
+          description: Offset the list of returned results by this amount. Default is zero.
+        - name: limit
+          in: query
+          type: integer
+          format: int32
+          description: 'Number of items to retrieve. Default is 5, maximum is 100.'
+      tags:
+        - Course
+      responses:
+        '200':
+          description: Courses in given subject area
+          schema:
+            $ref: '#/definitions/Courses'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  Course:
+    type: object
+    properties:
+      acad_career:
+        type: string
+      acad_group:
+        type: string
+      acad_org:
+        type: string
+      allow_mult_enroll:
+        type: string
+      campus:
+        type: string
+      catalog_nbr:
+        type: string
+      catalog_print:
+        type: string
+      component_primary:
+        type: string
+      consent:
+        type: string
+      course_approved:
+        type: string
+      course_title_long:
+        type: string
+      crse_contact_hrs:
+        type: number
+        format: double
+      crse_count:
+        type: integer
+        format: int32
+      crse_id:
+        type: string
+      crse_offer_nbr:
+        type: integer
+        format: int32
+      crse_repeat_limit:
+        type: integer
+        format: int32
+      crse_repeatable:
+        type: string
+      descr:
+        type: string
+      descrlong:
+        type: string
+      dyn_class_data:
+        type: string
+      eff_status:
+        type: string
+      effdt:
+        type: string
+      enrl_un_ld_clc_typ:
+        type: string
+      equiv_crse_id:
+        type: string
+      fees_exist:
+        type: string
+      grade_roster_print:
+        type: string
+      grading_basis:
+        type: string
+      id:
+        type: string
+      instructor_edit:
+        type: string
+      lst_mult_trm_crs:
+        type: string
+      oee_dyn_date_rule:
+        type: string
+      oee_ind:
+        type: string
+      rqmnt_designtn:
+        type: string
+      rqrmnt_group:
+        type: string
+      scc_row_add_dttm:
+        type: string
+      scc_row_add_oprid:
+        type: string
+      scc_row_upd_dttm:
+        type: string
+      scc_row_upd_oprid:
+        type: string
+      schedule_course:
+        type: string
+      schedule_print:
+        type: string
+      split_owner:
+        type: string
+      ssr_ac_exam_only:
+        type: string
+      ssr_averge_crs_fee:
+        type: integer
+        format: int32
+      ssr_cccosts_fee:
+        type: integer
+        format: int32
+      ssr_component:
+        type: string
+      ssr_crse_clasif:
+        type: string
+      ssr_crse_hours:
+        type: integer
+        format: int32
+      ssr_crse_type:
+        type: string
+      ssr_crse_typoff_cd:
+        type: string
+      ssr_drop_consent:
+        type: string
+      ssr_efts_factor:
+        type: number
+        format: double
+      ssr_elearn_status:
+        type: string
+      ssr_emb_literacy:
+        type: string
+      ssr_foreign_fee:
+        type: integer
+        format: int32
+      ssr_funding_code:
+        type: string
+      ssr_main_program:
+        type: string
+      ssr_nqf_credit:
+        type: integer
+        format: int32
+      ssr_nqf_level:
+        type: string
+      ssr_nzsced_dtl:
+        type: string
+      ssr_pbrf_eligible:
+        type: string
+      ssr_stage:
+        type: string
+      ssr_vrf_nzl:
+        type: integer
+        format: int32
+      subject:
+        type: string
+      units_acad_prog:
+        type: number
+        format: double
+      units_finaid_prog:
+        type: number
+        format: double
+      units_maximum:
+        type: number
+        format: double
+      units_minimum:
+        type: number
+        format: double
+      units_repeat_limit:
+        type: number
+        format: double
+        
+  Courses:
+    type: array
+    items:
+      $ref: '#/definitions/Course'
+      
+  CourseResult:
+    type: object
+    properties:
+      _index:
+        type: string
+      _type:
+        type: string
+      _id:
+        type: string
+      _version:
+        type: integer
+        format: int32
+      found:
+        type: boolean
+      _source:
+        $ref: '#/definitions/Course'
+        
+  CourseListResult:
+    type: object
+    properties:
+      took:
+        type: integer
+        format: int32
+      _shards:
+        type: object
+        properties:
+          total:
+            type: integer
+            format: int32
+          successful:
+            type: integer
+            format: int32
+          failed:
+            type: integer
+            format: int32
+      hits:
+        type: object
+        properties:
+          max_score:
+            type: number
+            format: double
+          hits:
+            type: array
+            items:
+              type: object
+              properties:
+                _id:
+                  type: string
+                _score:
+                  type: number
+                  format: double
+                _source:
+                  $ref: '#/definitions/Course'
+          total:
+            type: integer
+            format: int32
+            
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
