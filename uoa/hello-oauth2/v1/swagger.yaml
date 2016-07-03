@@ -1,0 +1,37 @@
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: Hello World Oauth2 API
+host: proxy.api.dev.auckland.ac.nz
+schemes:
+  - https
+basePath: /hello-oauth2
+produces:
+  - application/json
+paths:
+  /:
+    get:
+      description: |
+        Simple method to test OAuth2 integration.
+        Returns a message as `Msg` field of the response object.
+        Does **not** require any scope.
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            $ref: '#/definitions/TheMessage'
+
+      tags:
+        ["hello"]
+
+definitions:
+  TheMessage:
+    required:
+      - Msg  
+    properties:
+      Msg:
+        type: string
+      OptionalTag:
+        type: string    
+
+        
