@@ -1,0 +1,71 @@
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: Identity prototype API
+host: 'localhost:8092'
+basePath: /identityapi
+tags:
+  - name: upi
+    description: get by upi
+  - name: identity
+    description: the identity acces    
+paths:
+  '/identity/{upi}':
+    get:
+      tags:
+        - identity
+        - upi
+      summary: getPersonByUpi
+      description: 'Returns an identity object. '
+      operationId: getPersonByUpiUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: upi
+          in: path
+          description: ID or upi of identity to return
+          required: true
+          type: string
+      responses:
+        '200':
+          description: identity response
+          schema:
+            $ref: '#/definitions/Identity'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+definitions:
+  Identity:
+    type: object
+    required:
+      - displayName
+      - upi
+    properties:
+      department:
+        type: string
+      displayName:
+        type: string
+      emailAddress:
+        type: string
+      firstName:
+        type: string
+      groups:
+        type: array
+        items:
+          type: string
+      id:
+        type: integer
+        format: int64
+      jobTitle:
+        type: string
+      lastName:
+        type: string
+      mobile:
+        type: string
+      upi:
+        type: string
