@@ -39,6 +39,15 @@ paths:
           description: Forbidden
         '404':
           description: Not Found
+      security:
+        - identity_oauth: []
+
+securityDefinitions:
+  identity_oauth:
+    type: oauth2
+    authorizationUrl: 'https://proxy.dev.auckland.ac.nz/identity/oauth2/authorize'
+    flow: implicit
+      
 definitions:
   Identity:
     type: object
