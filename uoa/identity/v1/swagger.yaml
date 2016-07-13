@@ -5,8 +5,10 @@ info:
   contact: {}
   license:
     name: ''
-host: 'localhost:8092'
-basePath: /
+host: 'proxy.api.dev.auckland.ac.nz'
+schemes:
+  - https
+basePath: /identity
 tags:
   - name: upi-api
     description: the identity API
@@ -23,12 +25,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: REMOTE_USER
-          in: header
-          description: REMOTE_USER
-          required: true
-          type: string
-          default: iben883
         - name: q
           in: query
           description: ldap query
@@ -74,12 +70,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: REMOTE_USER
-          in: header
-          description: REMOTE_USER
-          required: true
-          type: string
-          default: iben883
         - name: firstname
           in: query
           description: first name
@@ -130,12 +120,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: REMOTE_USER
-          in: header
-          description: REMOTE_USER
-          required: true
-          type: string
-          default: iben883
         - name: upi
           in: path
           description: upi of identity
