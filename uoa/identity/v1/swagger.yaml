@@ -10,22 +10,6 @@ basePath: /
 tags:
   - name: upi-api
     description: the identity API
-    
-securityDefinitions:
-  identity_oauth_implicit:
-    type: oauth2
-    authorizationUrl: 'https://pam.dev.auckland.ac.nz/identity/oauth2/authorize'
-    flow: implicit
-    scopes:
-      read_scope: READ    
-  identity_oauth_authcode:
-    type: oauth2
-    authorizationUrl: 'https://pam.dev.auckland.ac.nz/identity/oauth2/authorize'
-    tokenUrl: 'https://proxy.api.dev.auckland.ac.nz/identity/oauth2/token'
-    scopes:
-      read_scope: READ
-    flow: accessCode
-    
 paths:
   /_query:
     get:
@@ -174,10 +158,23 @@ paths:
           description: Unexpected error
       security:
         - identity_oauth_implicit: 
-          - read_scope
+          - read
         - identity_oauth_authcode: 
-          - read_scope
-        
+          - read
+securityDefinitions:
+  identity_oauth_implicit:
+    type: oauth2
+    authorizationUrl: 'http://localhost:8090/identity/oauth2'
+    flow: implicit
+    scopes:
+      read: Read identity information
+  identity_oauth_authcode:
+    type: oauth2
+    authorizationUrl: 'http://localhost:8090/identity/oauth2'
+    tokenUrl: 'https://proxy.api.dev.auckland.ac.nz/identity/oauth2/token'
+    flow: accessCode
+    scopes:
+      read: Read identity information
 definitions:
   Identity:
     type: object
