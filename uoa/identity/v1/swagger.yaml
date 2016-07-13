@@ -2,19 +2,126 @@ swagger: '2.0'
 info:
   version: 0.0.1
   title: Identity prototype API
+  contact: {}
+  license:
+    name: ''
 host: 'localhost:8092'
-basePath: /identityapi
+basePath: /
 tags:
-  - name: upi
-    description: get by upi
-  - name: identity
-    description: the identity acces    
+  - name: upi-api
+    description: the identity API
 paths:
-  '/identity/{upi}':
+  /_query:
     get:
       tags:
-        - identity
-        - upi
+        - upi-api
+      summary: Find users by ldap query
+      description: 'Returns an array of identity object. '
+      operationId: queryLdapUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: REMOTE_USER
+          in: header
+          description: REMOTE_USER
+          required: true
+          type: string
+          default: iben883
+        - name: q
+          in: query
+          description: ldap query
+          required: true
+          type: string
+        - name: size
+          in: query
+          description: results per page
+          required: false
+          type: integer
+          default: 10
+          format: int32
+        - name: from
+          in: query
+          description: results start from
+          required: false
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: identity response
+          schema:
+            $ref: '#/definitions/Identity'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected error
+  /_search:
+    get:
+      tags:
+        - upi-api
+      summary: Find users by first or last name or both
+      description: 'Returns an array of identity object. '
+      operationId: searchByNameUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: REMOTE_USER
+          in: header
+          description: REMOTE_USER
+          required: true
+          type: string
+          default: iben883
+        - name: firstname
+          in: query
+          description: first name
+          required: false
+          type: string
+        - name: lastname
+          in: query
+          description: last name
+          required: false
+          type: string
+        - name: size
+          in: query
+          description: results per page
+          required: false
+          type: integer
+          default: 10
+          format: int32
+        - name: from
+          in: query
+          description: results start from
+          required: false
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: identity response
+          schema:
+            $ref: '#/definitions/Identity'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Unauthorized
+        '404':
+          description: Not Found
+        '500':
+          description: Unexpected error
+  '/{upi}':
+    get:
+      tags:
+        - upi-api
       summary: getPersonByUpi
       description: 'Returns an identity object. '
       operationId: getPersonByUpiUsingGET
@@ -23,9 +130,15 @@ paths:
       produces:
         - application/json
       parameters:
+        - name: REMOTE_USER
+          in: header
+          description: REMOTE_USER
+          required: true
+          type: string
+          default: iben883
         - name: upi
           in: path
-          description: ID or upi of identity to return
+          description: upi of identity
           required: true
           type: string
       responses:
@@ -33,21 +146,29 @@ paths:
           description: identity response
           schema:
             $ref: '#/definitions/Identity'
+        '400':
+          description: Bad request (unsupported id)
         '401':
           description: Unauthorized
         '403':
-          description: Forbidden
+          description: Unauthorized
         '404':
-          description: Not Found
+          description: Identity not found
+        '500':
+          description: Unexpected error
       security:
-        - identity_oauth: []
-
+        - identity_oauth_implicit: []
+        - identity_oauth_authcode: []
 securityDefinitions:
-  identity_oauth:
+  identity_oauth_implicit:
     type: oauth2
     authorizationUrl: 'https://proxy.dev.auckland.ac.nz/identity/oauth2/authorize'
     flow: implicit
-      
+  identity_oauth_authcode:
+    type: oauth2
+    authorizationUrl: 'https://proxy.api.dev.auckland.ac.nz/identity/oauth2/authorize'
+    tokenUrl: 'https://proxy.api.dev.auckland.ac.nz/identity/oauth2/token'
+    flow: accessCode
 definitions:
   Identity:
     type: object
