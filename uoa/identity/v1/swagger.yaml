@@ -14,7 +14,7 @@ tags:
 securityDefinitions:
   identity_oauth_implicit:
     type: oauth2
-    authorizationUrl: 'https://proxy.dev.auckland.ac.nz/identity/oauth2/authorize'
+    authorizationUrl: 'https://proxy.api.dev.auckland.ac.nz/identity/oauth2/authorize'
     flow: implicit
     scopes:
       read_scope: READ    
