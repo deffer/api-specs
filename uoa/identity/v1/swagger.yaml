@@ -14,13 +14,13 @@ tags:
 securityDefinitions:
   identity_oauth_implicit:
     type: oauth2
-    authorizationUrl: 'https://proxy.api.dev.auckland.ac.nz/identity/oauth2/authorize'
+    authorizationUrl: 'https://pam.dev.auckland.ac.nz/identity/oauth2/authorize'
     flow: implicit
     scopes:
       read_scope: READ    
   identity_oauth_authcode:
     type: oauth2
-    authorizationUrl: 'https://proxy.api.dev.auckland.ac.nz/identity/oauth2/authorize'
+    authorizationUrl: 'https://pam.dev.auckland.ac.nz/identity/oauth2/authorize'
     tokenUrl: 'https://proxy.api.dev.auckland.ac.nz/identity/oauth2/token'
     scopes:
       read_scope: READ
