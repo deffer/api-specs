@@ -1,0 +1,257 @@
+swagger: '2.0'
+info:
+  title: API Management API
+  description: Allows discovery of all University APIs and self-service provisioning of consumer credentials
+  version: "1.0.0"
+# the domain of the service
+host: api.dev.auckland.ac.nz
+# array of all schemes that your API supports
+schemes:
+  - https
+# will be prefixed to all paths
+basePath: /service/apimanage
+produces:
+  - application/json
+paths:
+  /me:
+    get:
+      summary: Consumer profile
+      description: |
+        Returns registration information of currently logged in user. If user
+        if not yet registered for API consumption, returns anempty record with
+        *registered* flag set to false
+      tags:
+        - Consumer
+      responses:
+        200:
+          description: Profile information for a user
+          schema:
+            $ref: '#/definitions/Profile'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    post:
+      summary: Update current user's details as a registered consumer
+      description: Use it to register as a consumer
+      tags:
+        - Consumer
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/Profile'
+      responses:
+        201: 
+          description: created
+        200: 
+          description: updated
+          
+  /me/oauth2:
+    get:
+      summary: Consumer OAuth2 credenials
+      description: |
+        Returns an array of Oauth2 credentials (clients) of currently logged in user.
+      parameters:
+        - name: clientid
+          in: query
+          description: To select a single credential by its id
+          required: false
+          type: string
+      tags:
+        - Credentials
+      responses:
+        200:
+          description: An array of poauth2 credentials
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Oauth2'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /consumers:
+    get:
+      summary: All registered consumers
+      description: Allows searching consumers by some fields.<br> Not implemented yet.
+      parameters:
+        - name: offset
+          in: query
+          type: integer
+          format: int32
+          description: Offset the list of returned results by this amount. Default is zero.
+        - name: limit
+          in: query
+          type: integer
+          format: int32
+          description: Number of items to retrieve. Default is 5, maximum is 100.
+        - name: example_double
+          in: query
+          description: Longitude component of start location.
+          required: true
+          type: number
+          format: double
+      tags:
+        - Consumer
+      responses:
+        200:
+          description: List of consumers found
+          schema:
+            $ref: '#/definitions/Profiles'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+            
+  /apis:
+    get:
+      summary: List/search
+      description: Allows searching APIs by some fields.<br> Search is not implemented yet.
+      parameters:
+        - name: offset
+          in: query
+          type: integer
+          format: int32
+          description: Offset the list of returned results by this amount. Default is zero.
+        - name: limit
+          in: query
+          type: integer
+          format: int32
+          description: Number of items to retrieve. Default is 5, maximum is 100.
+        - name: q
+          in: query
+          description: Query terms to search over APIs
+          required: false
+          type: number
+          format: double
+      tags:
+        - Api
+      responses:
+        200:
+          description: List of APIs matching search criteria
+          schema:
+            $ref: '#/definitions/Apis'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+    
+definitions:
+  Api:
+    type: object
+    properties:
+      displayname: 
+        type: string
+        description: Api display name
+      id:
+        type: string
+        description: API identifier. Used in Oauth2
+      description:
+        type: string
+        description: Detailed description of API
+      docs:
+        type: string
+        description: Location (url) of interactive documentation
+      spec:
+        type: string
+        description: Location (url) of the API swagger spec
+  Apis:
+    type: object
+    properties:
+      offset:
+        type: integer
+        format: int32
+        description: Position in pagination.
+      count:
+        type: integer
+        format: int32
+        description: Total number of APIs found.
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Api'      
+      
+  Profile:
+    type: object
+    properties:
+      upi:
+        type: string
+        description: User's upi (user must be registered with EPR)
+      first_name:
+        type: string
+        description: First name.
+      last_name:
+        type: string
+        description: Last name.
+      email:
+        type: string
+        description: Email address for notifications
+      registered:
+        type: boolean
+        description: Whether current user is registered for API consumption.
+      credentials:
+        type: object
+        properties:
+          oauth2:
+            type: array
+            items:
+              $ref: '#/definitions/Oauth2'
+          apikeys:
+            type: array
+            items:
+              $ref: '#/definitions/ApiKey'
+    
+  Oauth2:
+    type: object
+    properties:
+      appname:
+        type: string
+        description: Client application name - will be displayed to a user of the OAuth2 application
+      clientid:
+        type: string
+        description: Uniquely identifies a client application
+      clientsecret:
+        type: string
+        description: Optional. A secret to be used to authenticate client credentials
+      callback:
+        type: string
+        description: | 
+          A callback URL where code/token will be released to. Must be a valid url, 
+          not containing parameters or fragments. See [OAuth2 RFC section 3.1.2](https://tools.ietf.org/html/rfc6749) for details. 
+  ApiKey:
+    type: object
+    properties:
+      key:
+        type: string
+        description: Key value
+  Profiles:
+    type: object
+    properties:
+      offset:
+        type: integer
+        format: int32
+        description: Position in pagination.
+      limit:
+        type: integer
+        format: int32
+        description: Number of items to retrieve (100 max).
+      count:
+        type: integer
+        format: int32
+        description: Total number of consumers found.
+      data:
+        type: array
+        items:
+          $ref: '#/definitions/Profile'
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
