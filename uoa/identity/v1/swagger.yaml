@@ -2,6 +2,7 @@ swagger: '2.0'
 info:
   version: 0.0.1
   title: Identity prototype API
+  description: Access to identity information from University ldap AD
   contact: {}
   license:
     name: ''
@@ -17,7 +18,7 @@ paths:
     get:
       tags:
         - upi-api
-      summary: Find users by ldap query
+      summary: Find users by native ldap query
       description: 'Returns an array of identity object. '
       operationId: queryLdapUsingGET
       consumes:
@@ -27,7 +28,7 @@ paths:
       parameters:
         - name: q
           in: query
-          description: ldap query
+          description: native ldap query, e.g. (&(sn=Smith)(givenName=John))
           required: true
           type: string
         - name: size
@@ -43,6 +44,7 @@ paths:
           required: false
           type: integer
           format: int32
+          default: 0
       responses:
         '200':
           description: identity response
@@ -58,12 +60,17 @@ paths:
           description: Not Found
         '500':
           description: Unexpected error
+      security:
+        - identity_oauth_implicit: 
+          - identity-read
+        - identity_oauth_authcode: 
+          - identity-read          
   /_search:
     get:
       tags:
         - upi-api
       summary: Find users by first or last name or both
-      description: 'Returns an array of identity object. '
+      description: 'Returns an array of identity objects'
       operationId: searchByNameUsingGET
       consumes:
         - application/json
@@ -93,6 +100,7 @@ paths:
           required: false
           type: integer
           format: int32
+          default: 0
       responses:
         '200':
           description: identity response
@@ -108,12 +116,17 @@ paths:
           description: Not Found
         '500':
           description: Unexpected error
+      security:
+        - identity_oauth_implicit: 
+          - identity-read
+        - identity_oauth_authcode: 
+          - identity-read          
   '/{upi}':
     get:
       tags:
         - upi-api
       summary: getPersonByUpi
-      description: 'Returns an identity object. '
+      description: 'Returns an identity object'
       operationId: getPersonByUpiUsingGET
       consumes:
         - application/json
