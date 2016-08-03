@@ -13,12 +13,12 @@ basePath: /service/apimanage
 produces:
   - application/json
 paths:
-  /me:
+  /profile:
     get:
       summary: Consumer profile
       description: |
         Returns registration information of currently logged in user. If user
-        if not yet registered for API consumption, returns anempty record with
+        if not yet registered for API consumption, returns an empty record with
         *registered* flag set to false
       tags:
         - Consumer
@@ -31,7 +31,7 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-    post:
+    put:
       summary: Update current user's details as a registered consumer
       description: Use it to register as a consumer
       tags:
@@ -47,7 +47,7 @@ paths:
         200: 
           description: updated
           
-  /me/oauth2:
+  /profile/oauth2:
     get:
       summary: Consumer OAuth2 credenials
       description: |
@@ -71,40 +71,60 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-
-  /consumers:
-    get:
-      summary: All registered consumers
-      description: Allows searching consumers by some fields.<br> Not implemented yet.
+    put:
+      summary: Add oauth2 ceredentials to the account of currently logged in user
+      description: Add new oauth2 credentials
       parameters:
-        - name: offset
-          in: query
-          type: integer
-          format: int32
-          description: Offset the list of returned results by this amount. Default is zero.
-        - name: limit
-          in: query
-          type: integer
-          format: int32
-          description: Number of items to retrieve. Default is 5, maximum is 100.
-        - name: example_double
-          in: query
-          description: Longitude component of start location.
+        - name: credentials
+          description: Fields clinentid anf callback are required
+          in: body
           required: true
-          type: number
-          format: double
+          schema:
+            $ref: '#/definitions/Oauth2'
       tags:
-        - Consumer
+        - Credentials
+      responses:
+        201: 
+          description: created
+
+          
+  '/profile/oauth2/{clientid}':
+    get:
+      summary: Consumer OAuth2 credenials
+      description: |
+        Returns Oauth2 credential.
+      parameters:
+        - name: clientid
+          in: path
+          description: To select a single credential by its id
+          required: true
+          type: string
+      tags:
+        - Credentials
       responses:
         200:
-          description: List of consumers found
+          description: An array of poauth2 credentials
           schema:
-            $ref: '#/definitions/Profiles'
+            $ref: '#/definitions/Oauth2'
         default:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-            
+    delete:
+      summary: Delete oauth2 ceredentials of currently logged in user
+      description: Delete oauth2 credentials
+      parameters:
+        - name: clientid
+          description: Fields clinentid anf callback are required
+          in: path
+          required: true
+          type: string
+      tags:
+        - Credentials
+      responses:
+        200: 
+          description: success
+        
   /apis:
     get:
       summary: List/search
@@ -137,17 +157,40 @@ paths:
           description: Unexpected error
           schema:
             $ref: '#/definitions/Error'
-    
+  '/apis/{apiname}':
+    get:
+      summary: List/search
+      description: Returns the most recent version of api with th given name
+      parameters:
+        - name: apiname
+          in: path
+          required: true
+          type: string
+          description: Offset the list of returned results by this amount. Default is zero.
+      tags:
+        - Api
+      responses:
+        200:
+          description: Api
+          schema:
+            $ref: '#/definitions/Api'
+        default:
+          description: Unexpected error
+          schema:
+            $ref: '#/definitions/Error'
+        
 definitions:
   Api:
     type: object
     properties:
-      displayname: 
+      name: 
         type: string
         description: Api display name
       id:
         type: string
         description: API identifier. Used in Oauth2
+      version:
+        type: string
       description:
         type: string
         description: Detailed description of API
@@ -176,18 +219,9 @@ definitions:
   Profile:
     type: object
     properties:
-      upi:
+      displayName:
         type: string
-        description: User's upi (user must be registered with EPR)
-      first_name:
-        type: string
-        description: First name.
-      last_name:
-        type: string
-        description: Last name.
-      email:
-        type: string
-        description: Email address for notifications
+        description: Display name on the profile
       registered:
         type: boolean
         description: Whether current user is registered for API consumption.
@@ -226,25 +260,7 @@ definitions:
       key:
         type: string
         description: Key value
-  Profiles:
-    type: object
-    properties:
-      offset:
-        type: integer
-        format: int32
-        description: Position in pagination.
-      limit:
-        type: integer
-        format: int32
-        description: Number of items to retrieve (100 max).
-      count:
-        type: integer
-        format: int32
-        description: Total number of consumers found.
-      data:
-        type: array
-        items:
-          $ref: '#/definitions/Profile'
+
   Error:
     type: object
     properties:
