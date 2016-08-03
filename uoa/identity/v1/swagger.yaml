@@ -11,18 +11,17 @@ schemes:
   - https
 basePath: /identity
 tags:
-  - name: upi-api
-    description: the identity API
+  - name: identity
+    description: Identity records from AD
+  - name: user
+    description: User basic information
 paths:
   /_query:
     get:
       tags:
-        - upi-api
+        - identity
       summary: Find users by native ldap query
       description: 'Returns an array of identity object. '
-      operationId: queryLdapUsingGET
-      consumes:
-        - application/json
       produces:
         - application/json
       parameters:
@@ -68,12 +67,9 @@ paths:
   /_search:
     get:
       tags:
-        - upi-api
+        - identity
       summary: Find users by first or last name or both
       description: 'Returns an array of identity objects'
-      operationId: searchByNameUsingGET
-      consumes:
-        - application/json
       produces:
         - application/json
       parameters:
@@ -124,12 +120,9 @@ paths:
   '/{upi}':
     get:
       tags:
-        - upi-api
-      summary: getPersonByUpi
+        - identity
+      summary: Returns an identity object
       description: 'Returns an identity object'
-      operationId: getPersonByUpiUsingGET
-      consumes:
-        - application/json
       produces:
         - application/json
       parameters:
@@ -158,6 +151,30 @@ paths:
           - identity-read
         - identity_oauth_authcode: 
           - identity-read
+  '/me':
+    get:
+      tags:
+        - user
+      summary: Information about loggen-in user
+      description: 'Returns current user information'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: User information
+          schema:
+            $ref: '#/definitions/User'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Unexpected error
+      security:
+        - identity_oauth_implicit: 
+          - default
+          - identity-read
+        - identity_oauth_authcode: 
+          - default      
+          - identity-read
 securityDefinitions:
   identity_oauth_implicit:
     type: oauth2
@@ -165,6 +182,7 @@ securityDefinitions:
     flow: implicit
     scopes:
       identity-read: Read identity information
+      default: Basic user information
   identity_oauth_authcode:
     type: oauth2
     authorizationUrl: 'https://pam.dev.auckland.ac.nz/identity/oauth2/authorize'
@@ -172,6 +190,7 @@ securityDefinitions:
     flow: accessCode
     scopes:
       identity-read: Read identity information
+      default: Basic user information      
 definitions:
   Identity:
     type: object
@@ -201,4 +220,18 @@ definitions:
       mobile:
         type: string
       upi:
+        type: string
+  User:
+    type: object
+    required:
+      - username
+      - id
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      email:
+        type: string
+      username:
         type: string
