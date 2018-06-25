@@ -1,0 +1,820 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Data Access API REST API for NeSI",
+        "version": "1.0",
+        "title": "DAA REST API",
+        "termsOfService": "Terms of service",
+        "contact": {
+            "name": "NeSI Collab",
+            "url": "https://www.nesi.org.nz/about-us/contact-us",
+            "email": "support@nesi.org.nz"
+        },
+        "license": {
+            "name": "Apache License Version 2.0",
+            "url": "https://www.apache.org/licenses/LICENSE-2.0"
+        }
+    },
+    "host": "api.dev.auckland.ac.nz",
+    "basePath": "/service/nesi-projects/v1",
+    "schemes": [
+        "https"
+    ],
+    "security": [
+        {
+            "authApiKey": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "project-controller",
+            "description": "Project Controller"
+        },
+        {
+            "name": "daily-utc-controller",
+            "description": "Daily Utc Controller"
+        }
+    ],
+    "paths": {
+        "/dw/": {
+            "get": {
+                "tags": [
+                    "daily-utc-controller"
+                ],
+                "summary": "welcome",
+                "operationId": "welcomeUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "*/*"
+                ],
+                "parameters": [
+                    {
+                        "name": "model",
+                        "in": "query",
+                        "description": "model",
+                        "required": false,
+                        "type": "object"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/dw/get_sum_byIds": {
+            "get": {
+                "tags": [
+                    "daily-utc-controller"
+                ],
+                "summary": "getSumByProjects",
+                "operationId": "getSumByProjectsUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "projectCodes",
+                        "in": "query",
+                        "description": "projectCodes",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/dw/get_sumcorehours": {
+            "get": {
+                "tags": [
+                    "daily-utc-controller"
+                ],
+                "summary": "getSumCoreHours",
+                "operationId": "getSumCoreHoursUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "projectCodes",
+                        "in": "query",
+                        "description": "projectCodes",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/project/event": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "summary": "Find All Eventlog",
+                "description": "Find All Eventlog",
+                "operationId": "findAllEventLogUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "project-controller"
+                ],
+                "summary": "Add Eventlog",
+                "description": "Add Eventlog",
+                "operationId": "addEventLogUsingPOST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "event",
+                        "description": "event",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/EventlogVO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/project/groups": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "summary": "List all projects",
+                "description": "List all projects",
+                "operationId": "findAllUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successfully retrieved list",
+                        "schema": {
+                            "$ref": "#/definitions/Iterable"
+                        }
+                    },
+                    "401": {
+                        "description": "You are not authorized to view the resource"
+                    },
+                    "403": {
+                        "description": "Accessing the resource you were trying to reach is forbidden"
+                    },
+                    "404": {
+                        "description": "The resource you were trying to reach is not found"
+                    }
+                }
+            }
+        },
+        "/project/groups/all": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "summary": "findAllProjectsWithUsers",
+                "operationId": "findAllProjectsWithUsersUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/project/groups/allocation/{facilityId}": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "summary": "Get Allocation Cores",
+                "description": "Get allocation cores by facility id",
+                "operationId": "listPersonsOfProjectByFacilityUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "facilityId",
+                        "in": "path",
+                        "description": "facilityId",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/project/groups/by_institution": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "summary": "Get users by institution",
+                "description": "Get users by institution",
+                "operationId": "getUsersForInstitutionUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/project/groups/code/{code}": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "summary": "Get project by project code.",
+                "description": "Get project by project code.",
+                "operationId": "getFilteredUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "path",
+                        "description": "code",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/project/groups/generate/{id}": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "summary": "Generate Project properties",
+                "description": "Generate Project properties",
+                "operationId": "generateProjectPropertiesUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/project/groups/project_facility": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "summary": "Find All Project Facilities",
+                "description": "Find All Find All Project Facilities",
+                "operationId": "findAllProjectFacilitiesUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/project/groups/{code}/members": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "summary": "Find members of project",
+                "description": "Find members belongs to a project",
+                "operationId": "listPersonsOfProjectUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "path",
+                        "description": "code",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/project/institution": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "summary": "Find All Institutions",
+                "description": "Find All Institutions",
+                "operationId": "institutionListUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/project/persons": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "summary": "User List",
+                "description": "All avalable user list",
+                "operationId": "findPersonsUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/project/persons/email": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "summary": "Find person by Email",
+                "description": "Find person by Email",
+                "operationId": "findPersonByEmailUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "email",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/project/persons/generate/{id}": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "summary": "Generate person properties",
+                "description": "Generate person properties",
+                "operationId": "generatePersonPropertiesUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "isAdmin",
+                        "in": "query",
+                        "description": "isAdmin",
+                        "required": true,
+                        "type": "boolean"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/project/persons/name/{name}": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "summary": "Find person by Name",
+                "description": "Find person by Name",
+                "operationId": "findPersonByNameUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "name",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/project/persons/username/{username}": {
+            "get": {
+                "tags": [
+                    "project-controller"
+                ],
+                "summary": "Find person by username",
+                "description": "Find person by username",
+                "operationId": "findPersonByUsernameUsingGET",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "username",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "authApiKey": {
+            "type": "apiKey",
+            "in": "header",
+            "name": "apikey"
+        }
+    },
+    "definitions": {
+        "EventlogVO": {
+            "type": "object",
+            "properties": {
+                "event": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "note": {
+                    "type": "string"
+                },
+                "time": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "Iterable": {
+            "type": "object"
+        }
+    }
+}
